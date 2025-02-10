@@ -20,7 +20,7 @@ public class ArticleController {
         return "ArticleWrite";
     }
 
-    @PostMapping("/article/writepro")
+    @PostMapping("/article/writepro") //URL에 데이터가 노출되지 않아 GET 방식보다 높은 보안, 주로 데이터를 저장할 때 사용
     public String articleWritePro(Article article){
 
         articleService.write(article);
@@ -34,5 +34,12 @@ public class ArticleController {
         model.addAttribute("list", articleService.articleList());
 
         return "ArticleList";
+    }
+
+    @GetMapping("/article/view") // localhost:8080/article/view?id=1 이라고 주소창에 입력되면 1이 id 값으로 입력 (파라미터, get방식)
+    public String articleView(Model model, Long id){
+
+        model.addAttribute("article", articleService.articleView(id));
+        return "ArticleView";
     }
 }
