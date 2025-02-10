@@ -14,7 +14,7 @@ public class ArticleService {
     private ArticleRepository articleRepository;
 
     // 글 작성 처리
-    public void write(Article article){
+    public void articlewrite(Article article){
 
         articleRepository.save(article);
     }
@@ -29,5 +29,11 @@ public class ArticleService {
     public Article articleView(Long id){
 
         return articleRepository.findById(id).get();
+    }
+
+    // 특정 게시글 삭제 처리
+    public void articleDelete(Long id){
+
+        articleRepository.deleteById(id);
     }
 }
