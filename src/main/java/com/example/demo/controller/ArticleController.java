@@ -4,6 +4,7 @@ import com.example.demo.entity.Article;
 import com.example.demo.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -25,5 +26,13 @@ public class ArticleController {
         articleService.write(article);
 
         return "";
+    }
+
+    @GetMapping("/article/list")
+    public String articleList(Model model){ //데이터를 담아서 우리가 쓰는 페이지로 보내주는 model
+
+        model.addAttribute("list", articleService.articleList());
+
+        return "ArticleList";
     }
 }
