@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -24,7 +25,6 @@ public class ArticleController {
     public String articleWritePro(Article article){
 
         articleService.articlewrite(article);
-
         return "";
     }
 
@@ -32,7 +32,6 @@ public class ArticleController {
     public String articleList(Model model){ //데이터를 담아서 우리가 쓰는 페이지로 보내주는 model
 
         model.addAttribute("list", articleService.articleList());
-
         return "ArticleList";
     }
 
@@ -47,6 +46,25 @@ public class ArticleController {
     public String articleDelete(Long id){
 
         articleService.articleDelete(id);
+        return "redirect:/article/list";
+    }
+
+    @GetMapping("/article/modify/{id}")
+    public String articleModify(@PathVariable("id") Long id, Model model){
+
+        model.addAttribute("article", articleService.articleView(id));
+        return "ArticleModify";
+    }
+
+    @PostMapping("/article/update/{id}")
+    public String articleUpdate(@PathVariable("id") Long id, Article article){
+
+        //원래 JPA에서는 수정할 때 덮어씌우는 방식 사용X, 변경 감지 기능을 사용하여 수정해야함, 하지만 쉬운 개념이 아니기에 일단 넘어가고 JPA변경 감지, JPA merge, JPA persist 학습하기.
+        Article articleTemp = articleService.articleView(id);
+        articleTemp.setTitle(article.getTitle());
+        articleTemp.setContent(article.getContent());
+        articleService.articlewrite(articleTemp);
+
         return "redirect:/article/list";
     }
 }
