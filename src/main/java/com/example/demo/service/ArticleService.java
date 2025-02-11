@@ -4,8 +4,11 @@ import com.example.demo.entity.Article;
 import com.example.demo.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ArticleService {
@@ -14,7 +17,20 @@ public class ArticleService {
     private ArticleRepository articleRepository;
 
     // 글 작성 처리
-    public void articlewrite(Article article){
+    public void articlewrite(Article article, MultipartFile file) throws Exception {
+
+        String projectPath = System.getProperty("user.dir") + "/src/main/resources/static/files";
+
+        UUID uuid = UUID.randomUUID();
+
+        String filename = uuid + "_" + file.getOriginalFilename(); //식별자_파일이름
+
+        File saveFile = new File(projectPath, filename);
+
+        file.transferTo(saveFile);
+
+        article.setFileName(filename);
+        article.setFilePath("/files/" + filename);
 
         articleRepository.save(article);
     }

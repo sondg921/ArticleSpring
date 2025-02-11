@@ -21,8 +21,11 @@ public class Article {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(columnDefinition = "TEXT")
-    private String image_url;
+    @Column(length = 300)
+    private String filePath;
+
+    @Column(length = 150)
+    private String fileName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class ArticleController {
@@ -22,9 +23,9 @@ public class ArticleController {
     }
 
     @PostMapping("/article/writepro") //URL에 데이터가 노출되지 않아 GET 방식보다 높은 보안, 주로 데이터를 저장할 때 사용
-    public String articleWritePro(Article article, Model model){
+    public String articleWritePro(Article article, Model model, MultipartFile file) throws Exception{
 
-        articleService.articlewrite(article);
+        articleService.articlewrite(article, file);
         model.addAttribute("message", "글 작성이 완료되었습니다.");
         model.addAttribute("searchUrl", "/article/list");
         return "Message";
@@ -59,13 +60,13 @@ public class ArticleController {
     }
 
     @PostMapping("/article/update/{id}")
-    public String articleUpdate(@PathVariable("id") Long id, Article article, Model model){
+    public String articleUpdate(@PathVariable("id") Long id, Article article, Model model, MultipartFile file) throws Exception{
 
         //원래 JPA에서는 수정할 때 덮어씌우는 방식 사용X, 변경 감지 기능을 사용하여 수정해야함, 하지만 쉬운 개념이 아니기에 일단 넘어가고 JPA변경 감지, JPA merge, JPA persist 학습하기.
         Article articleTemp = articleService.articleView(id);
         articleTemp.setTitle(article.getTitle());
         articleTemp.setContent(article.getContent());
-        articleService.articlewrite(articleTemp);
+        articleService.articlewrite(articleTemp, file);
 
         model.addAttribute("message", "글이 수정되었습니다.");
         model.addAttribute("searchUrl", "/article/list");
