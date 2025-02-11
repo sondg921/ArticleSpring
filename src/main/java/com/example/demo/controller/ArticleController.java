@@ -22,10 +22,12 @@ public class ArticleController {
     }
 
     @PostMapping("/article/writepro") //URL에 데이터가 노출되지 않아 GET 방식보다 높은 보안, 주로 데이터를 저장할 때 사용
-    public String articleWritePro(Article article){
+    public String articleWritePro(Article article, Model model){
 
         articleService.articlewrite(article);
-        return "";
+        model.addAttribute("message", "글 작성이 완료되었습니다.");
+        model.addAttribute("searchUrl", "/article/list");
+        return "message";
     }
 
     @GetMapping("/article/list")
