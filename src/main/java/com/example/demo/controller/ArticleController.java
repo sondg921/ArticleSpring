@@ -3,6 +3,9 @@ package com.example.demo.controller;
 import com.example.demo.entity.Article;
 import com.example.demo.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +35,9 @@ public class ArticleController {
     }
 
     @GetMapping("/article/list")
-    public String articleList(Model model){ //데이터를 담아서 우리가 쓰는 페이지로 보내주는 model
+    public String articleList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){ //데이터를 담아서 우리가 쓰는 페이지로 보내주는 model
 
-        model.addAttribute("list", articleService.articleList());
+        model.addAttribute("list", articleService.articleList(pageable));
         return "ArticleList";
     }
 

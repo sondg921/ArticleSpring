@@ -3,6 +3,8 @@ package com.example.demo.service;
 import com.example.demo.entity.Article;
 import com.example.demo.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,9 +38,9 @@ public class ArticleService {
     }
 
     // 게시글 리스트 처리
-    public List<Article> articleList(){
+    public Page<Article> articleList(Pageable pageable) {
 
-        return articleRepository.findAll(); //Article이라는 클래스가 담긴 리스트를 반환
+        return articleRepository.findAll(pageable); //Article이라는 클래스가 담긴 리스트를 반환
     }
 
     // 특정 게시글 불러오기
