@@ -21,7 +21,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @GetMapping("/article/write") //localhost:8080/article/write 주소로 접속시 ArticleWrite 파일을 보여주겠다는 의미
-    public String articleWriteFprm(){
+    public String articleWriteForm(){
 
         return "ArticleWrite";
     }
@@ -36,9 +36,18 @@ public class ArticleController {
     }
 
     @GetMapping("/article/list")
-    public String articleList(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){ //데이터를 담아서 우리가 쓰는 페이지로 보내주는 model
+    public String articleList(Model model, //데이터를 담아서 우리가 쓰는 페이지로 보내주는 model
+                              @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                              String searchKeyword){
 
-        Page<Article> list = articleService.articleList(pageable);
+        Page<Article> list = null;
+
+        if(searchKeyword == null){
+            list = articleService.articleList(pageable);
+        }
+        else{
+            list = articleService.articleSearchList(searchKeyword, pageable);
+        }
 
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);

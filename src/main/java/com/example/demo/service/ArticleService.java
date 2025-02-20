@@ -40,7 +40,12 @@ public class ArticleService {
     // 게시글 리스트 처리
     public Page<Article> articleList(Pageable pageable) {
 
-        return articleRepository.findAll(pageable); //Article이라는 클래스가 담긴 리스트를 반환
+        return articleRepository.findAll(pageable);
+    }
+
+    public Page<Article> articleSearchList(String searchKeyword, Pageable pageable){
+
+        return articleRepository.findByTitleContaining(searchKeyword, pageable);
     }
 
     // 특정 게시글 불러오기
